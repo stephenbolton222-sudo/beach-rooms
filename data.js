@@ -6,7 +6,7 @@
 // ---------------------------------------------------------------------------
 
 window.PLAN_DATA = {
-  version: "4",
+  version: "5",
 
   nights: [
     "Sat night",
@@ -72,8 +72,8 @@ window.PLAN_DATA = {
     { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia"], den: [], living: [] },
     { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia"], den: [], living: [] },
     { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia", "roise"], den: [], living: [] },
-    { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia", "roise"], den: ["rebekah", "julia", "clint", "kylea"], living: [] },
-    { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "jordan"], bunk: ["emma", "amelia", "roise", "elizabeth"], den: ["rebekah", "julia", "clint", "kylea"], living: [] },
-    { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "jordan"], bunk: ["emma", "amelia", "elizabeth"], den: ["rebekah", "julia", "clint", "kylea"], living: ["stephen", "roise"] }
+    { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["emma", "julia", "rebekah", "roise"], den: ["clint", "kylea"], living: [] },
+    { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["emma", "julia", "rebekah", "roise"], den: ["clint", "kylea", "jordan", "elizabeth"], living: [] },
+    { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["emma", "julia", "rebekah"], den: ["clint", "kylea", "jordan", "elizabeth"], living: ["stephen", "roise"] }
   ]
 };
