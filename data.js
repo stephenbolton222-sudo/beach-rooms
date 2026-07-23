@@ -6,7 +6,7 @@
 // ---------------------------------------------------------------------------
 
 window.PLAN_DATA = {
-  version: "5",
+  version: "6",
 
   nights: [
     "Sat night",
@@ -48,7 +48,7 @@ window.PLAN_DATA = {
     { id: "kylea", name: "Kylea", arrivalNight: 4 },
     { id: "elizabeth", name: "Elizabeth", arrivalNight: 5 },
     { id: "jordan", name: "Jordan", arrivalNight: 5 },
-    { id: "stephen", name: "Stephen", arrivalNight: 6 }
+    { id: "stephen", name: "Stephen", arrivalNight: 5 }
   ],
 
   hardRules: [
@@ -71,7 +71,7 @@ window.PLAN_DATA = {
     { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia"], den: [], living: [] },
     { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia", "roise"], den: [], living: [] },
     { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["emma", "julia", "rebekah", "roise"], den: ["clint", "kylea"], living: [] },
-    { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["emma", "julia", "rebekah", "roise"], den: ["clint", "kylea", "jordan", "elizabeth"], living: [] },
+    { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["emma", "julia", "rebekah"], den: ["clint", "kylea", "jordan", "elizabeth"], living: ["stephen", "roise"] },
     { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["emma", "julia", "rebekah"], den: ["clint", "kylea", "jordan", "elizabeth"], living: ["stephen", "roise"] }
   ]
 };
