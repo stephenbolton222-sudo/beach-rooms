@@ -56,6 +56,10 @@
     return null;
   }
 
+  function isRoomAvailable(room, night) {
+    return !room.availableNights || room.availableNights.indexOf(night) !== -1;
+  }
+
   function computeWarnings() {
     var messages = [];
     var cellFlags = {}; // key "night:roomId" -> { overCapacity, ruleViolation, ruleHint }
@@ -69,7 +73,15 @@
     NIGHTS.forEach(function (_, night) {
       ROOMS.forEach(function (room) {
         var occ = state[night][room.id] || [];
-        if (occ.length > room.capacity) {
+        if (!occ.length) return;
+        if (!isRoomAvailable(room, night)) {
+          flag(night, room.id, "overCapacity");
+          messages.push({
+            danger: true,
+            text: room.name + " isn't set up on " + NIGHTS[night] + " but has " +
+              occ.map(function (pid) { return peopleById[pid].name; }).join(", ")
+          });
+        } else if (occ.length > room.capacity) {
           flag(night, room.id, "overCapacity");
           messages.push({
             danger: true,

@@ -1,16 +1,12 @@
 // ---------------------------------------------------------------------------
-// PLAN DATA - this is the baseline plan baked into the site.
+// PLAN DATA - baseline plan baked into the site.
 // Edit this file and redeploy to change what everyone sees when they first
 // open the link (their in-browser tweaks are separate and never touch this
-// file). Everything below is PLACEHOLDER - replace with the real roster,
-// rooms, and rules.
+// file).
 // ---------------------------------------------------------------------------
 
 window.PLAN_DATA = {
-  // Bump this any time you redeploy a materially different baseline.
-  // Visitors whose saved edits were keyed to an older version fall back to
-  // the new baseline instead of seeing a stale mix.
-  version: "1",
+  version: "2",
 
   nights: [
     "Sat night",
@@ -23,61 +19,61 @@ window.PLAN_DATA = {
   ],
 
   rooms: [
-    { id: "r1", name: "Room 1", capacity: 4, bedConfig: "1 king + 2 twins" },
-    { id: "r2", name: "Room 2", capacity: 4, bedConfig: "2 queens" },
-    { id: "r3", name: "Room 3", capacity: 4, bedConfig: "1 queen + 2 twins" },
-    { id: "r4", name: "Room 4", capacity: 3, bedConfig: "1 queen + 1 twin" },
-    { id: "r5", name: "Room 5", capacity: 3, bedConfig: "3 twins" }
+    { id: "master", name: "Upstairs Master", capacity: 2, bedConfig: "1 queen" },
+    { id: "room2", name: "Upstairs Room 2", capacity: 3, bedConfig: "1 queen + maybe a 3rd on air mattress" },
+    { id: "room3", name: "Downstairs Room 3", capacity: 3, bedConfig: "1 queen + maybe a 3rd on air mattress (reserved for Grandma & Grandpa)" },
+    { id: "room4", name: "Downstairs Room 4", capacity: 3, bedConfig: "1 queen + maybe a 3rd on air mattress" },
+    { id: "bunk", name: "Downstairs Bunk Room", capacity: 4, bedConfig: "4 bunks" },
+    { id: "den", name: "Downstairs Den", capacity: 4, bedConfig: "3 air mattresses (up to 4 people)" },
+    // availableNights restricts which nights this room may be used at all;
+    // omit the field on other rooms to mean "available every night".
+    { id: "living", name: "Living Room", capacity: 1, bedConfig: "1 air mattress", availableNights: [6] }
   ],
 
-  // arrivalNight is an index into `nights` above (0 = arrives night 1).
-  // Everyone is assumed to stay through the last night.
+  // arrivalNight is an index into `nights` above (0 = Sat night).
+  // Everyone stays through the last night (Fri night, index 6).
   people: [
-    { id: "p1", name: "Person 1", arrivalNight: 0 },
-    { id: "p2", name: "Person 2", arrivalNight: 0 },
-    { id: "p3", name: "Person 3", arrivalNight: 0 },
-    { id: "p4", name: "Person 4", arrivalNight: 0 },
-    { id: "p5", name: "Person 5", arrivalNight: 0 },
-    { id: "p6", name: "Person 6", arrivalNight: 0 },
-    { id: "p7", name: "Person 7", arrivalNight: 1 },
-    { id: "p8", name: "Person 8", arrivalNight: 1 },
-    { id: "p9", name: "Person 9", arrivalNight: 1 },
-    { id: "p10", name: "Person 10", arrivalNight: 2 },
-    { id: "p11", name: "Person 11", arrivalNight: 2 },
-    { id: "p12", name: "Person 12", arrivalNight: 3 },
-    { id: "p13", name: "Person 13", arrivalNight: 3 },
-    { id: "p14", name: "Person 14", arrivalNight: 3 },
-    { id: "p15", name: "Person 15", arrivalNight: 4 },
-    { id: "p16", name: "Person 16", arrivalNight: 4 },
-    { id: "p17", name: "Person 17", arrivalNight: 5 },
-    { id: "p18", name: "Person 18", arrivalNight: 5 }
+    { id: "david", name: "David", arrivalNight: 0 },
+    { id: "mc", name: "Mary Catherine", arrivalNight: 0 },
+    { id: "michael", name: "Michael", arrivalNight: 0 },
+    { id: "tricia", name: "Tricia", arrivalNight: 0 },
+    { id: "grandma", name: "Grandma", arrivalNight: 0 },
+    { id: "grandpa", name: "Grandpa", arrivalNight: 0 },
+    { id: "emma", name: "Emma", arrivalNight: 0 },
+    { id: "amelia", name: "Amelia", arrivalNight: 0 },
+    { id: "daniel", name: "Daniel", arrivalNight: 0 },
+    { id: "lindsay", name: "Lindsay", arrivalNight: 0 },
+    { id: "roise", name: "Roise", arrivalNight: 3 },
+    { id: "rebekah", name: "Rebekah", arrivalNight: 4 },
+    { id: "julia", name: "Julia", arrivalNight: 4 },
+    { id: "clint", name: "Clint", arrivalNight: 4 },
+    { id: "kylea", name: "Kylea", arrivalNight: 4 },
+    { id: "elizabeth", name: "Elizabeth", arrivalNight: 5 },
+    { id: "jordan", name: "Jordan", arrivalNight: 5 },
+    { id: "stephen", name: "Stephen", arrivalNight: 6 }
   ],
 
-  // Hard rules: enforced with a red warning if violated.
-  // exclusive: true means ONLY the listed people may ever occupy that room.
-  // Example (uncomment and edit once you know the real pairing):
-  // hardRules: [
-  //   { id: "hr1", label: "Grandparents", personIds: ["p1", "p2"], roomId: "r1", exclusive: true }
-  // ],
-  hardRules: [],
+  hardRules: [
+    { id: "hr-grandparents", label: "Grandma & Grandpa", personIds: ["grandma", "grandpa"], roomId: "room3", exclusive: true }
+  ],
 
-  // Soft rules: shown as an amber hint if violated, never blocks anything.
-  // Example:
-  // softRules: [
-  //   { id: "sr1", label: "Kylea & Clint together", personIds: ["p3", "p4"] }
-  // ],
-  softRules: [],
+  softRules: [
+    { id: "sr-stephen-roise", label: "Stephen & Roise", personIds: ["stephen", "roise"] },
+    { id: "sr-daniel-lindsay", label: "Daniel & Lindsay", personIds: ["daniel", "lindsay"] },
+    { id: "sr-clint-kylea", label: "Clint & Kylea", personIds: ["clint", "kylea"] },
+    { id: "sr-david-mc", label: "David & Mary Catherine", personIds: ["david", "mc"] },
+    { id: "sr-michael-tricia", label: "Michael & Tricia", personIds: ["michael", "tricia"] }
+  ],
 
-  // The baseline arrangement: assignments[nightIndex][roomId] = [personId, ...]
-  // Anyone who has arrived but isn't listed for that night shows up in the
-  // "Unassigned" row automatically - you don't need to enumerate them.
+  // assignments[nightIndex][roomId] = [personId, ...]
+  // Anyone who has arrived but isn't listed shows up in the Unassigned row.
   assignments: [
-    { r1: ["p1", "p2"], r2: ["p3", "p4"], r3: ["p5"], r4: [], r5: [] },
-    { r1: ["p1", "p2"], r2: ["p3", "p4"], r3: ["p5", "p7"], r4: ["p8"], r5: ["p9"] },
-    { r1: ["p1", "p2"], r2: ["p3", "p4"], r3: ["p5", "p7"], r4: ["p8", "p10"], r5: ["p9", "p11"] },
-    { r1: ["p1", "p2"], r2: ["p3", "p4"], r3: ["p5", "p7", "p12"], r4: ["p8", "p10"], r5: ["p9", "p11", "p13"] },
-    { r1: ["p1", "p2"], r2: ["p3", "p4"], r3: ["p5", "p7", "p12"], r4: ["p8", "p10", "p15"], r5: ["p9", "p11", "p13"] },
-    { r1: ["p1", "p2"], r2: ["p3", "p4"], r3: ["p5", "p7", "p12"], r4: ["p8", "p10", "p15"], r5: ["p9", "p11", "p13"] },
-    { r1: ["p1", "p2"], r2: ["p3", "p4"], r3: ["p5", "p7", "p12"], r4: ["p8", "p10", "p15"], r5: ["p9", "p11", "p13"] }
+    { master: ["david", "mc"], room2: ["michael", "tricia"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia"], den: [], living: [] },
+    { master: ["david", "mc"], room2: ["michael", "tricia"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia"], den: [], living: [] },
+    { master: ["david", "mc"], room2: ["michael", "tricia"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia"], den: [], living: [] },
+    { master: ["david", "mc"], room2: ["michael", "tricia"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia", "roise"], den: [], living: [] },
+    { master: ["david", "mc"], room2: ["michael", "tricia"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia", "roise"], den: ["rebekah", "julia", "clint", "kylea"], living: [] },
+    { master: ["david", "mc"], room2: ["michael", "tricia"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "jordan"], bunk: ["emma", "amelia", "roise", "elizabeth"], den: ["rebekah", "julia", "clint", "kylea"], living: [] },
+    { master: ["david", "mc"], room2: ["michael", "tricia"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "jordan"], bunk: ["emma", "amelia", "roise", "elizabeth"], den: ["rebekah", "julia", "clint", "kylea"], living: ["stephen"] }
   ]
 };
