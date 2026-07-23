@@ -189,8 +189,23 @@ main {
   background: var(--chip-bg);
   border: 1px solid var(--chip-border);
   font-size: 0.85rem;
-  cursor: pointer;
+  cursor: grab;
   user-select: none;
+  touch-action: none;
+}
+
+.chip.dragging-source {
+  opacity: 0.35;
+}
+
+.chip-ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  opacity: 0.92;
+  cursor: grabbing;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
 }
 
 .chip.selected {

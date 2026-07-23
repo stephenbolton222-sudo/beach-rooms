@@ -136,6 +136,10 @@
 
   function clearEl(el) { while (el.firstChild) el.removeChild(el.firstChild); }
 
+  var DRAG_THRESHOLD = 6; // px of pointer movement before a tap becomes a drag
+  var dragState = null;
+  var ghostEl = null;
+
   function makeChip(personId, night, roomId) {
     var chip = document.createElement("span");
     chip.className = "chip";
@@ -143,11 +147,104 @@
     if (selection && selection.personId === personId && selection.night === night && selection.roomId === roomId) {
       chip.className += " selected";
     }
-    chip.addEventListener("click", function (e) {
-      e.stopPropagation();
-      onChipClick(personId, night, roomId);
+
+    chip.addEventListener("pointerdown", function (e) {
+      if (e.button !== 0) return;
+      if (chip.setPointerCapture) chip.setPointerCapture(e.pointerId);
+      dragState = {
+        pointerId: e.pointerId,
+        personId: personId, night: night, roomId: roomId,
+        startX: e.clientX, startY: e.clientY,
+        dragging: false, cancelled: false, lastHoverCell: null
+      };
     });
+    chip.addEventListener("pointermove", function (e) {
+      if (!dragState || e.pointerId !== dragState.pointerId) return;
+      var dx = e.clientX - dragState.startX;
+      var dy = e.clientY - dragState.startY;
+      if (!dragState.dragging) {
+        if (Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
+        dragState.dragging = true;
+        selection = null;
+        startGhost(chip, e.clientX, e.clientY);
+        chip.classList.add("dragging-source");
+      }
+      moveGhost(e.clientX, e.clientY);
+      updateHoverCell(e.clientX, e.clientY);
+    });
+    chip.addEventListener("pointerup", function (e) {
+      if (!dragState || e.pointerId !== dragState.pointerId) return;
+      finishDrag();
+    });
+    chip.addEventListener("pointercancel", function (e) {
+      if (!dragState || e.pointerId !== dragState.pointerId) return;
+      dragState.cancelled = true;
+      finishDrag();
+    });
+
     return chip;
+  }
+
+  function startGhost(chip, x, y) {
+    ghostEl = document.createElement("span");
+    ghostEl.className = "chip chip-ghost";
+    ghostEl.textContent = chip.textContent;
+    ghostEl.style.left = x + "px";
+    ghostEl.style.top = y + "px";
+    document.body.appendChild(ghostEl);
+  }
+
+  function moveGhost(x, y) {
+    if (!ghostEl) return;
+    ghostEl.style.left = x + "px";
+    ghostEl.style.top = y + "px";
+  }
+
+  function updateHoverCell(x, y) {
+    var el = document.elementFromPoint(x, y); // ghost has pointer-events:none, so this sees through it
+    var cell = el && el.closest ? el.closest(".cell") : null;
+    if (dragState.lastHoverCell && dragState.lastHoverCell !== cell) {
+      dragState.lastHoverCell.classList.remove("drop-target");
+    }
+    if (cell && cell.dataset.night === String(dragState.night)) {
+      cell.classList.add("drop-target");
+    }
+    dragState.lastHoverCell = cell;
+  }
+
+  function finishDrag() {
+    var wasDragging = dragState.dragging;
+    var wasCancelled = dragState.cancelled;
+    var personId = dragState.personId, night = dragState.night, roomId = dragState.roomId;
+    var hoverCell = dragState.lastHoverCell;
+
+    if (ghostEl) { ghostEl.remove(); ghostEl = null; }
+    dragState = null;
+
+    if (!wasDragging) {
+      onChipClick(personId, night, roomId);
+      return;
+    }
+    if (!wasCancelled && hoverCell && hoverCell.dataset.night === String(night)) {
+      performMove(personId, night, roomId, hoverCell.dataset.roomId);
+    } else {
+      render(); // snap back and clear any stray hover highlight
+    }
+  }
+
+  function performMove(personId, night, fromRoomId, toRoomId) {
+    if (fromRoomId !== toRoomId) {
+      if (fromRoomId !== UNASSIGNED) {
+        var src = state[night][fromRoomId];
+        var idx = src.indexOf(personId);
+        if (idx !== -1) src.splice(idx, 1);
+      }
+      if (toRoomId !== UNASSIGNED && state[night][toRoomId].indexOf(personId) === -1) {
+        state[night][toRoomId].push(personId);
+      }
+      saveState();
+    }
+    render();
   }
 
   function onChipClick(personId, night, roomId) {
@@ -162,21 +259,9 @@
   function onCellClick(night, roomId) {
     if (!selection) return;
     if (selection.night !== night) return;
-    if (selection.roomId === roomId) { selection = null; render(); return; }
-
-    if (selection.roomId !== UNASSIGNED) {
-      var src = state[night][selection.roomId];
-      var idx = src.indexOf(selection.personId);
-      if (idx !== -1) src.splice(idx, 1);
-    }
-    if (roomId !== UNASSIGNED) {
-      if (state[night][roomId].indexOf(selection.personId) === -1) {
-        state[night][roomId].push(selection.personId);
-      }
-    }
+    var personId = selection.personId, fromRoomId = selection.roomId;
     selection = null;
-    saveState();
-    render();
+    performMove(personId, night, fromRoomId, roomId);
   }
 
   function copyForward(night) {
@@ -250,6 +335,8 @@
     NIGHTS.forEach(function (_, night) {
       var td = document.createElement("td");
       td.className = "cell";
+      td.dataset.night = String(night);
+      td.dataset.roomId = UNASSIGNED;
       var flags = warnings.cellFlags[night + ":" + UNASSIGNED];
       if (flags && flags.ruleHint) td.className += " rule-hint";
       td.addEventListener("click", function () { onCellClick(night, UNASSIGNED); });
@@ -278,6 +365,8 @@
       NIGHTS.forEach(function (_, night) {
         var td = document.createElement("td");
         td.className = "cell";
+        td.dataset.night = String(night);
+        td.dataset.roomId = room.id;
         var flags = warnings.cellFlags[night + ":" + room.id];
         if (flags) {
           if (flags.overCapacity || flags.ruleViolation) td.className += " over-capacity rule-violation";
