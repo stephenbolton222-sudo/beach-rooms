@@ -127,12 +127,21 @@ main {
   background: var(--header-bg);
   position: sticky;
   top: 0;
+  z-index: 2;
+}
+
+.plan-grid thead th:first-child {
+  left: 0;
+  z-index: 3;
 }
 
 .row-label {
   background: var(--header-bg);
   min-width: 140px;
   white-space: nowrap;
+  position: sticky;
+  left: 0;
+  z-index: 1;
 }
 
 .row-label .room-name {
