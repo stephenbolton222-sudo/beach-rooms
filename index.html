@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Beach House Room Planner</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>Beach House Room Planner</h1>
+    <p class="subtitle">
+      Tap a person to pick them up, then tap a room/night cell to move them there.
+      Your changes are saved only in this browser — nothing is sent anywhere.
+    </p>
+    <div class="toolbar">
+      <button id="resetBtn" type="button">Reset to original plan</button>
+      <button id="exportBtn" type="button">Export current arrangement</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="warnings" class="warnings" hidden></div>
+    <div class="grid-scroll">
+      <table id="planGrid" class="plan-grid"></table>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <p>Beach House Room Planner &mdash; static, local-only, no accounts.</p>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
