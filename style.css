@@ -182,13 +182,20 @@ main {
 }
 
 .chip {
-  display: inline-block;
-  padding: 0.2rem 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 7.5rem;
+  padding: 0.2rem 0.4rem;
   margin: 0.15rem;
   border-radius: 999px;
   background: var(--chip-bg);
   border: 1px solid var(--chip-border);
   font-size: 0.85rem;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   cursor: grab;
   user-select: none;
   touch-action: none;
