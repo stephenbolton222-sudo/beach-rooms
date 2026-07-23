@@ -25,9 +25,7 @@ window.PLAN_DATA = {
     { id: "room4", name: "Downstairs Room 4", capacity: 3, bedConfig: "1 queen" },
     { id: "bunk", name: "Downstairs Bunk Room", capacity: 4, bedConfig: "4 bunks" },
     { id: "den", name: "Downstairs Den", capacity: 4, bedConfig: "3 air mattresses" },
-    // availableNights restricts which nights this room may be used at all;
-    // omit the field on other rooms to mean "available every night".
-    { id: "living", name: "Living Room", capacity: 2, bedConfig: "1 air mattress", availableNights: [6] }
+    { id: "living", name: "Living Room", capacity: 2, bedConfig: "1 air mattress" }
   ],
 
   // arrivalNight is an index into `nights` above (0 = Sat night).
