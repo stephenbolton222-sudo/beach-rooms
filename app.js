@@ -7,29 +7,43 @@
   var PEOPLE = DATA.people;
   var HARD_RULES = DATA.hardRules || [];
   var SOFT_RULES = DATA.softRules || [];
+  var PLANS = DATA.plans;
   var UNASSIGNED = "__unassigned__";
-  var STORAGE_KEY = "beachRoomsPlan:" + DATA.version;
+  var ACTIVE_PLAN_KEY = "beachRoomsActivePlan:" + DATA.version;
 
   var peopleById = {};
   PEOPLE.forEach(function (p) { peopleById[p.id] = p; });
   var roomsById = {};
   ROOMS.forEach(function (r) { roomsById[r.id] = r; });
-
-  var state = loadState();
-  var selection = null; // { personId, night, roomId } roomId === UNASSIGNED if from the pool
+  var plansById = {};
+  PLANS.forEach(function (p) { plansById[p.id] = p; });
 
   function deepClone(x) { return JSON.parse(JSON.stringify(x)); }
 
+  function planStorageKey(planId) { return "beachRoomsPlan:" + DATA.version + ":" + planId; }
+
+  function loadActivePlanId() {
+    try {
+      var id = localStorage.getItem(ACTIVE_PLAN_KEY);
+      if (id && plansById[id]) return id;
+    } catch (e) { /* ignore */ }
+    return PLANS[0].id;
+  }
+
+  var activePlanId = loadActivePlanId();
+  var state = loadState();
+  var selection = null; // { personId, night, roomId } roomId === UNASSIGNED if from the pool
+
   function loadState() {
     try {
-      var raw = localStorage.getItem(STORAGE_KEY);
+      var raw = localStorage.getItem(planStorageKey(activePlanId));
       if (raw) return JSON.parse(raw);
     } catch (e) { /* ignore corrupt storage */ }
-    return deepClone(DATA.assignments);
+    return deepClone(plansById[activePlanId].assignments);
   }
 
   function saveState() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    try { localStorage.setItem(planStorageKey(activePlanId), JSON.stringify(state)); }
     catch (e) { /* storage unavailable, edits just won't persist across reloads */ }
   }
 
@@ -398,10 +412,10 @@
   }
 
   document.getElementById("resetBtn").addEventListener("click", function () {
-    var ok = window.confirm("Reset to the original plan? This discards your changes in this browser.");
+    var ok = window.confirm("Reset to " + plansById[activePlanId].label + "'s original arrangement? This discards your changes in this browser.");
     if (!ok) return;
-    try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
-    state = deepClone(DATA.assignments);
+    try { localStorage.removeItem(planStorageKey(activePlanId)); } catch (e) { /* ignore */ }
+    state = deepClone(plansById[activePlanId].assignments);
     selection = null;
     render();
   });
@@ -409,6 +423,8 @@
   document.getElementById("exportBtn").addEventListener("click", function () {
     var payload = {
       version: DATA.version,
+      planId: activePlanId,
+      planLabel: plansById[activePlanId].label,
       exportedAt: new Date().toISOString(),
       assignments: state
     };
@@ -422,6 +438,24 @@
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   });
+
+  var planSelect = document.getElementById("planSelect");
+  if (planSelect) {
+    PLANS.forEach(function (p) {
+      var opt = document.createElement("option");
+      opt.value = p.id;
+      opt.textContent = p.label;
+      planSelect.appendChild(opt);
+    });
+    planSelect.value = activePlanId;
+    planSelect.addEventListener("change", function () {
+      activePlanId = planSelect.value;
+      try { localStorage.setItem(ACTIVE_PLAN_KEY, activePlanId); } catch (e) { /* ignore */ }
+      state = loadState();
+      selection = null;
+      render();
+    });
+  }
 
   render();
 })();

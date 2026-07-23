@@ -6,7 +6,7 @@
 // ---------------------------------------------------------------------------
 
 window.PLAN_DATA = {
-  version: "6",
+  version: "7",
 
   nights: [
     "Sat night",
@@ -63,15 +63,36 @@ window.PLAN_DATA = {
     { id: "sr-michael-tricia", label: "Michael & Tricia", personIds: ["michael", "tricia"] }
   ],
 
-  // assignments[nightIndex][roomId] = [personId, ...]
-  // Anyone who has arrived but isn't listed shows up in the Unassigned row.
-  assignments: [
-    { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia"], den: [], living: [] },
-    { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia"], den: [], living: [] },
-    { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia"], den: [], living: [] },
-    { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia", "roise"], den: [], living: [] },
-    { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["emma", "julia", "rebekah", "roise"], den: ["clint", "kylea"], living: [] },
-    { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["emma", "julia", "rebekah"], den: ["clint", "kylea", "jordan", "elizabeth"], living: ["stephen", "roise"] },
-    { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["emma", "julia", "rebekah"], den: ["clint", "kylea", "jordan", "elizabeth"], living: ["stephen", "roise"] }
+  // Each plan is a full alternative week. assignments[nightIndex][roomId] =
+  // [personId, ...]; anyone who has arrived but isn't listed shows up in the
+  // Unassigned row. The first plan loads by default; others are reachable
+  // from the plan picker in the page header.
+  plans: [
+    {
+      id: "default",
+      label: "Default",
+      assignments: [
+        { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia"], den: [], living: [] },
+        { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia"], den: [], living: [] },
+        { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia"], den: [], living: [] },
+        { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia", "roise"], den: [], living: [] },
+        { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["emma", "julia", "rebekah", "roise"], den: ["clint", "kylea"], living: [] },
+        { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["emma", "julia", "rebekah"], den: ["clint", "kylea", "jordan", "elizabeth"], living: ["stephen", "roise"] },
+        { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["emma", "julia", "rebekah"], den: ["clint", "kylea", "jordan", "elizabeth"], living: ["stephen", "roise"] }
+      ]
+    },
+    {
+      id: "clint-kylea-own-room",
+      label: "Clint & Kylea in own room",
+      assignments: [
+        { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia"], den: [], living: [] },
+        { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia"], den: [], living: [] },
+        { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia"], den: [], living: [] },
+        { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay"], bunk: ["emma", "amelia", "roise"], den: [], living: [] },
+        { master: ["michael", "tricia"], room2: ["david", "mc"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["emma", "julia", "rebekah", "roise"], den: ["clint", "kylea"], living: [] },
+        { master: ["michael", "tricia", "emma"], room2: ["david", "mc", "rebekah"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["julia", "stephen", "roise", "elizabeth"], den: ["clint", "kylea"], living: ["jordan"] },
+        { master: ["michael", "tricia", "emma"], room2: ["david", "mc", "rebekah"], room3: ["grandma", "grandpa"], room4: ["daniel", "lindsay", "amelia"], bunk: ["julia", "stephen", "roise", "elizabeth"], den: ["clint", "kylea"], living: ["jordan"] }
+      ]
+    }
   ]
 };
